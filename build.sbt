@@ -43,7 +43,7 @@ libraryDependencies ++= Seq(
 // Build info
 lazy val root = (project in file(".")).
   enablePlugins(BuildInfoPlugin).
-  dependsOn(srxCore, srxData).
+  dependsOn(srxCore).
   settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, BuildInfoKey.map(buildInfoBuildNumber) { case (k, v) =>
       "buildNumber" -> v
@@ -52,6 +52,5 @@ lazy val root = (project in file(".")).
   )
 
 lazy val srxCore = RootProject(uri("https://github.com/PSESD/srx-shared-core.git"))
-lazy val srxData = RootProject(uri("https://github.com/PSESD/srx-shared-data.git"))
 
 enablePlugins(JavaServerAppPackaging)

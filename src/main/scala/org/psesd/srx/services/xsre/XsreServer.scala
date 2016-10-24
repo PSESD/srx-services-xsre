@@ -39,6 +39,8 @@ object XsreServer extends SrxServer {
     )
   )
 
+  private val xSreResource = "xsres"
+
   override def serviceRouter(implicit executionContext: ExecutionContext) = HttpService {
 
     case req@GET -> Root =>
@@ -53,9 +55,33 @@ object XsreServer extends SrxServer {
     case req@GET -> Root / _ if services(req, CoreResource.Info.toString) =>
       respondWithInfo(getDefaultSrxResponse(req))
 
+    case req@GET -> Root / _ if services(req, xSreResource) =>
+      // executeRequest(req, None, xSreResource, Xsre)
+      // GET ALL xSREs is not allowed
+      MethodNotAllowed()
+
+    case req@GET -> Root / `xSreResource` / _ =>
+      executeRequest(req, None, xSreResource, Xsre)
+
+    case req@POST -> Root / _ if services(req, xSreResource) =>
+      // executeRequest(req, None, xSreResource, Xsre, Xsre.apply)
+      // POST xSREs is not allowed - use PUT instead to Update if exists else Create
+      MethodNotAllowed()
+
+    case req@PUT -> Root / _ if services(req, xSreResource) =>
+      MethodNotAllowed()
+
+    case req@PUT -> Root / `xSreResource` / _ =>
+      executeRequest(req, None, xSreResource, Xsre, Xsre.apply)
+
+    case req@DELETE -> Root / _ if services(req, xSreResource) =>
+      MethodNotAllowed()
+
+    case req@DELETE -> Root / `xSreResource` / _ =>
+      executeRequest(req, None, xSreResource, Xsre)
+
     case _ =>
       NotFound()
-
   }
 
 }
