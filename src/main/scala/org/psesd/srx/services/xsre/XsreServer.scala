@@ -17,6 +17,7 @@ import scala.concurrent.ExecutionContext
 object XsreServer extends SrxServer {
 
   private final val ServerUrlKey = "SERVER_URL"
+  private final val configCacheResource = "configcache"
 
   private final val DatasourceClassNameKey = "DATASOURCE_CLASS_NAME"
   private final val DatasourceMaxConnectionsKey = "DATASOURCE_MAX_CONNECTIONS"
@@ -55,6 +56,9 @@ object XsreServer extends SrxServer {
     case req@GET -> Root / _ if services(req, CoreResource.Info.toString) =>
       respondWithInfo(getDefaultSrxResponse(req))
 
+
+    /* XSRE */
+
     case req@GET -> Root / _ if services(req, xSreResource) =>
       // executeRequest(req, None, xSreResource, Xsre)
       // GET ALL xSREs is not allowed
@@ -79,6 +83,13 @@ object XsreServer extends SrxServer {
 
     case req@DELETE -> Root / `xSreResource` / _ =>
       executeRequest(req, None, xSreResource, Xsre)
+
+
+    /* CONFIG CACHE */
+
+    case req@DELETE -> Root / _ if services(req, configCacheResource) =>
+      executeRequest(req, None, xSreResource, Xsre)
+
 
     case _ =>
       NotFound()

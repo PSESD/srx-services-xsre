@@ -3,7 +3,6 @@ package org.psesd.srx.services.xsre
 import com.amazonaws.services.s3.model.AmazonS3Exception
 import org.json4s.JValue
 import org.psesd.srx.services.xsre.exceptions.AmazonS3UnauthorizedException
-import org.psesd.srx.shared.core.config.{AmazonS3Config, Environment}
 import org.psesd.srx.shared.core.exceptions.{ArgumentInvalidException, ArgumentNullException, ArgumentNullOrEmptyOrWhitespaceException, SrxResourceNotFoundException}
 import org.psesd.srx.shared.core.extensions.TypeExtensions._
 import org.psesd.srx.shared.core.io.AmazonS3Client
@@ -222,7 +221,7 @@ object Xsre extends SrxResourceService {
   private def deleteXsre(zoneId: String, xsreId: String): Unit = {
     try {
       val fileName = XsreFile.getName(xsreId)
-      val s3Client = getS3Client(zoneId)
+      val s3Client = getZoneS3Client(zoneId)
       s3Client.delete(fileName)
       s3Client.shutdown
     } catch {
@@ -239,21 +238,12 @@ object Xsre extends SrxResourceService {
     }
   }
 
-  private def getS3Client(zoneId: String) = {
-    val accessKey = Environment.getProperty(AmazonS3Config.AccessKeyKey)
-    val bucketName = Environment.getProperty(AmazonS3Config.BucketNameKey)
-    val path = zoneId
-    val secret = Environment.getProperty(AmazonS3Config.SecretKey)
-    val socketTimeout = Environment.getProperty(AmazonS3Config.SocketTimeoutKey).toInt
-    new AmazonS3Client(accessKey, secret, socketTimeout, bucketName, path)
-  }
-
   private def getXsre(zoneId: String, xsreId: String): Option[String] = {
     var xsreFile: XsreFile = null
 
     try {
       val fileName = XsreFile.getName(xsreId)
-      val s3Client = getS3Client(zoneId)
+      val s3Client = getZoneS3Client(zoneId)
       if (s3Client.fileExists(fileName)) {
         xsreFile = new XsreFile(xsreId, s3Client.download(fileName))
       }
@@ -291,10 +281,15 @@ object Xsre extends SrxResourceService {
     }
   }
 
+  private def getZoneS3Client(zoneId: String): AmazonS3Client = {
+    val zoneConfig = ConfigCache.getConfig(zoneId)
+    AmazonS3Client(zoneConfig.cacheBucketName, zoneConfig.cachePath)
+  }
+
   private def updateXsre(zoneId: String, xsreId: String, xsre: Xsre): Unit = {
     try {
       val fileName = XsreFile.getName(xsreId)
-      val s3Client = getS3Client(zoneId)
+      val s3Client = getZoneS3Client(zoneId)
       s3Client.upload(fileName, xsre.xsre)
       s3Client.shutdown
     } catch {
