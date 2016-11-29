@@ -2,7 +2,7 @@ package org.psesd.srx.services.xsre
 
 import com.amazonaws.services.s3.model.AmazonS3Exception
 import org.json4s.JValue
-import org.psesd.srx.services.xsre.exceptions.AmazonS3UnauthorizedException
+import org.psesd.srx.services.xsre.exceptions.{AmazonS3UnauthorizedException, XmlValidationException}
 import org.psesd.srx.shared.core.exceptions.{ArgumentInvalidException, ArgumentNullException, ArgumentNullOrEmptyOrWhitespaceException, SrxResourceNotFoundException}
 import org.psesd.srx.shared.core.extensions.TypeExtensions._
 import org.psesd.srx.shared.core.io.AmazonS3Client
@@ -198,6 +198,8 @@ object Xsre extends SrxResourceService {
         updateXsre(zoneId.get, id.get, xsre)
         new XsreResult(SifRequestAction.Update, SifRequestAction.getSuccessStatusCode(SifRequestAction.Update), id.get, "")
       } catch {
+        case x: XmlValidationException =>
+          SrxResourceErrorResult(SifHttpStatusCode.BadRequest, x)
         case e: Exception =>
           SrxResourceErrorResult(SifHttpStatusCode.InternalServerError, e)
       }
@@ -288,6 +290,9 @@ object Xsre extends SrxResourceService {
 
   private def updateXsre(zoneId: String, xsreId: String, xsre: Xsre): Unit = {
     try {
+
+      validateXsre(zoneId, xsre)
+
       val fileName = XsreFile.getName(xsreId)
       val s3Client = getZoneS3Client(zoneId)
       s3Client.upload(fileName, xsre.xsre)
@@ -306,4 +311,7 @@ object Xsre extends SrxResourceService {
     }
   }
 
+  def validateXsre(zoneId: String, xsre: Xsre): Unit = {
+    XmlSchemaValidator.validate(xsre.xsre, SchemaCache.getSchema(zoneId))
+  }
 }

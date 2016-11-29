@@ -1,5 +1,7 @@
 package org.psesd.srx.services.xsre
 
+import org.psesd.srx.shared.core.SrxResourceErrorResult
+import org.psesd.srx.shared.core.exceptions.ArgumentInvalidException
 import org.psesd.srx.shared.core.extensions.TypeExtensions._
 import org.psesd.srx.shared.core.sif.{SifHttpStatusCode, SifRequestParameter}
 import org.scalatest.FunSuite
@@ -20,6 +22,14 @@ class XsreTests extends FunSuite {
     val xsre = Xsre(xsreXml.toXmlString)
     assert(xsre.id.equals(id))
     assert(xsre.xsre.contains("<xsre>"))
+  }
+
+  test("factory invalid") {
+    val thrown = intercept[ArgumentInvalidException] {
+      val xsre = Xsre(<foo></foo>, None)
+    }
+
+    assert(thrown.getMessage.equals("The root element 'foo' is invalid."))
   }
 
   test("node") {
@@ -51,6 +61,13 @@ class XsreTests extends FunSuite {
     assert(result.statusCode == SifHttpStatusCode.BadRequest)
     assert(result.exceptions.head.getMessage == "The id parameter is invalid.")
     assert(result.toXml.isEmpty)
+  }
+
+  test("update invalid") {
+    val result = Xsre.update(TestValues.testXsreInvalid, List[SifRequestParameter](SifRequestParameter("zoneId", "test"), SifRequestParameter("id", "999"))).asInstanceOf[SrxResourceErrorResult]
+    assert(!result.success)
+    assert(result.statusCode == SifHttpStatusCode.BadRequest)
+    assert(result.exceptions.head.getMessage.contains("Attribute 'refId' must appear on element 'xSre'"))
   }
 
   test("update valid") {
@@ -121,5 +138,10 @@ class XsreTests extends FunSuite {
     assert(result.exceptions.isEmpty)
     assert(result.toXml.get.toXmlString.contains("id=\"%s\"".format("999")))
   }
+
+  test("validate valid") {
+    Xsre.validateXsre("test", TestValues.testXsre)
+  }
+
 
 }
