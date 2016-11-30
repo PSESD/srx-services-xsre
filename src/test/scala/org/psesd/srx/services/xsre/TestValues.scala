@@ -38,5 +38,11 @@ object TestValues {
     <reportDate>2015-05-29</reportDate>
   </xSre>, None)
   lazy val testXsreInvalid = Xsre(<xSre><localId>999</localId></xSre>, None)
+  lazy val testXsreParameters = List[SifRequestParameter](
+    SifRequestParameter("zoneId", "test"),
+    SifRequestParameter("contextId", "DEFAULT"),
+    SifRequestParameter("generatorId", "srx-services-xsre test"),
+    SifRequestParameter("id", "999")
+  )
 
 }

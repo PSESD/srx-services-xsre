@@ -41,7 +41,7 @@ class XsreTests extends FunSuite {
   }
 
   test("create not implemented") {
-    val result = Xsre.create(TestValues.testXsre, List[SifRequestParameter](SifRequestParameter("zoneId", "test"), SifRequestParameter("id", "999")))
+    val result = Xsre.create(TestValues.testXsre, TestValues.testXsreParameters)
     assert(!result.success)
     assert(result.statusCode == SifHttpStatusCode.InternalServerError)
     assert(result.exceptions.head.getMessage == "xSRE CREATE method not implemented.")
@@ -64,14 +64,14 @@ class XsreTests extends FunSuite {
   }
 
   test("update invalid") {
-    val result = Xsre.update(TestValues.testXsreInvalid, List[SifRequestParameter](SifRequestParameter("zoneId", "test"), SifRequestParameter("id", "999"))).asInstanceOf[SrxResourceErrorResult]
+    val result = Xsre.update(TestValues.testXsreInvalid, TestValues.testXsreParameters).asInstanceOf[SrxResourceErrorResult]
     assert(!result.success)
     assert(result.statusCode == SifHttpStatusCode.BadRequest)
     assert(result.exceptions.head.getMessage.contains("Attribute 'refId' must appear on element 'xSre'"))
   }
 
   test("update valid") {
-    val result = Xsre.update(TestValues.testXsre, List[SifRequestParameter](SifRequestParameter("zoneId", "test"), SifRequestParameter("id", "999"))).asInstanceOf[XsreResult]
+    val result = Xsre.update(TestValues.testXsre, TestValues.testXsreParameters).asInstanceOf[XsreResult]
     assert(result.success)
     assert(result.exceptions.isEmpty)
     assert(result.toXml.get.toXmlString.contains("id=\"%s\"".format("999")))
@@ -110,7 +110,7 @@ class XsreTests extends FunSuite {
   }
 
   test("query valid") {
-    val result = Xsre.query(List[SifRequestParameter](SifRequestParameter("zoneId", "test"), SifRequestParameter("id", "999")))
+    val result = Xsre.query(TestValues.testXsreParameters)
     assert(result.success)
     assert(result.statusCode == SifHttpStatusCode.Ok)
     assert(result.toXml.isDefined)
@@ -133,7 +133,7 @@ class XsreTests extends FunSuite {
   }
 
   test("delete valid") {
-    val result = Xsre.delete(List[SifRequestParameter](SifRequestParameter("zoneId", "test"), SifRequestParameter("id", "999"))).asInstanceOf[XsreResult]
+    val result = Xsre.delete(TestValues.testXsreParameters).asInstanceOf[XsreResult]
     assert(result.success)
     assert(result.exceptions.isEmpty)
     assert(result.toXml.get.toXmlString.contains("id=\"%s\"".format("999")))
