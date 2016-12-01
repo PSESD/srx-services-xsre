@@ -88,7 +88,7 @@ object XsreServer extends SrxServer {
     /* CONFIG CACHE */
 
     case req@DELETE -> Root / _ if services(req, configCacheResource) =>
-      executeRequest(req, None, xSreResource, Xsre)
+      executeRequest(req, None, configCacheResource, ConfigCache)
 
 
     case _ =>

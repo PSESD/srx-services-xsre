@@ -177,6 +177,16 @@ class XsreServerTests extends FunSuite {
     }
   }
 
+  test("delete configCache valid") {
+    if (Environment.isLocal) {
+      val resource = "configcache"
+      val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
+      sifRequest.generatorId = Some(TestValues.generatorId)
+      val response = new SifConsumer().delete(sifRequest)
+      assert(response.statusCode.equals(SifHttpStatusCode.Ok))
+    }
+  }
+
 
   private def delayedInterrupt(delay: Long) {
     delayedInterrupt(Thread.currentThread, delay)
