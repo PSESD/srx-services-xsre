@@ -36,7 +36,7 @@ object TestValues {
         <birthDate>1996-10-17</birthDate>
       </demographics>
       <reportDate>2015-05-29</reportDate>
-  </xSre> None)
+  </xSre>, None)
   lazy val testXsreInvalid = Xsre(<xSre><localId>999</localId></xSre>, None)
   lazy val testXsreParameters = List[SifRequestParameter](
     SifRequestParameter("zoneId", "test"),

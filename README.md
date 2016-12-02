@@ -39,13 +39,11 @@ Content-Type | Required when body is present - tells receiver how to parse body 
 generatorId | Identification token of the “generator” of this request or event | testgenerator
 messageId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
 messageType | If specified, must be set to: REQUEST | REQUEST
-queueId | Contains the identity of one of the Consumer’s assigned Queues to which the delayed Response from the Service Provider to this request must be routed. |
 requestAction | If specified, must be set to: QUERY, UPDATE, or DELETE | QUERY
 requestId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
 requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
 responseAction | Must match requestAction | QUERY
 serviceType | If specified, must be set to: OBJECT | OBJECT
-user-agent | Browser and operating system info |
 x-forwarded-for | CBO making original request |
 
 
