@@ -1,9 +1,13 @@
 # Srx-Services-xSre
-**Retrieves, updates, and deletes xSRE XML for District to CBO transfers.**
+**Retrieves, creates, updates, and deletes xSRE XML for District to CBO transfers.**
 
 ***
-#### GET, UPDATE, DELETE
-XSREs are retrieved, created, updated, and deleted via a GET request using the following URL format:
+* XSREs are retrieved via a GET request.
+* XSREs are created via an UPDATE request, NOT a CREATE request.
+* XSREs are updated via a UPDATE request.
+* XSREs are deleted via a DELETE request.
+
+All requests use the following URL format:
 
 ```
 https://[baseUrl]/xsres/[studentId];zoneId=[zoneId];contextId=[contextId]
@@ -36,7 +40,7 @@ generatorId | Identification token of the “generator” of this request or eve
 messageId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
 messageType | If specified, must be set to: REQUEST | REQUEST
 queueId | Contains the identity of one of the Consumer’s assigned Queues to which the delayed Response from the Service Provider to this request must be routed. |
-requestAction | If specified, must be set to: QUERY | QUERY
+requestAction | If specified, must be set to: QUERY, UPDATE, or DELETE | QUERY
 requestId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
 requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
 responseAction | Must match requestAction | QUERY
