@@ -1,5 +1,5 @@
 # Srx-Services-xSre
-**Stores and retrieves xSRE XML for District to CBO transfers.**
+**Retrieves, updates, and deletes xSRE XML for District to CBO transfers.**
 
 ***
 #### GET
@@ -21,23 +21,28 @@ The following required headers must be present in the GET request:
 
 Header | Description | Example
 ------ | ----------- | -------
-x-forwarded-proto | Must be set to: https | https
-x-forwarded-port | Must be set to: 443 | 443
-timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
 authorization | Must be set to a valid HMAC-SHA256 encrypted authorization token | SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
-
+timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
+x-forwarded-port | Must be set to: 443 | 443
+x-forwarded-proto | Must be set to: https | https
 
 The following optional headers may also be included:
 
 Header | Description | Example
 ------ | ----------- | -------
-messageType | If specified, must be set to: REQUEST | REQUEST
-serviceType | If specified, must be set to: OBJECT | OBJECT
-requestAction | If specified, must be set to: QUERY | QUERY
-requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+accept | Used to indicate when JSON is expected in response (application/json), else results default to XML | application/xml
+Content-Type | Required when body is present - tells receiver how to parse body of message. Supported: application/json, application/xml (default) | application/xml
+generatorId | Identification token of the “generator” of this request or event | testgenerator
 messageId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
+messageType | If specified, must be set to: REQUEST | REQUEST
+queueId | Contains the identity of one of the Consumer’s assigned Queues to which the delayed Response from the Service Provider to this request must be routed. |
+requestAction | If specified, must be set to: QUERY | QUERY
 requestId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
-generatorId | Service generating request | testgenerator
+requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+responseAction | Must match requestAction | QUERY
+serviceType | If specified, must be set to: OBJECT | OBJECT
+user-agent | Browser and operating system info |
+x-forwarded-for | CBO making original request |
 
 
 ###### Example xSRE GET request
@@ -106,24 +111,28 @@ The following required headers must be present in the PUT request:
 
 Header | Description | Example
 ------ | ----------- | -------
-x-forwarded-proto | Must be set to: https | https
-x-forwarded-port | Must be set to: 443 | 443
-timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
 authorization | Must be set to a valid HMAC-SHA256 encrypted authorization token | SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
-
+timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
+x-forwarded-port | Must be set to: 443 | 443
+x-forwarded-proto | Must be set to: https | https
 
 The following optional headers may also be included:
 
 Header | Description | Example
 ------ | ----------- | -------
-messageType | If specified, must be set to: REQUEST | REQUEST
-serviceType | If specified, must be set to: OBJECT | OBJECT
-requestAction | If specified, must be set to: UPDATE | UPDATE
-requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+accept | Used to indicate when JSON is expected in response (application/json), else results default to XML | application/xml
+Content-Type | Required when body is present - tells receiver how to parse body of message. Supported: application/json, application/xml (default) | application/xml
+generatorId | Identification token of the “generator” of this request or event | testgenerator
 messageId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
+messageType | If specified, must be set to: REQUEST | REQUEST
+queueId | Contains the identity of one of the Consumer’s assigned Queues to which the delayed Response from the Service Provider to this request must be routed. |
+requestAction | If specified, must be set to: UPDATE | UPDATE
 requestId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
-generatorId | Service generating request | testgenerator
-
+requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+responseAction | Must match requestAction | UPDATE
+serviceType | If specified, must be set to: OBJECT | OBJECT
+user-agent | Browser and operating system info |
+x-forwarded-for | CBO making original request |
 
 ###### Example xSRE PUT request
 
@@ -133,7 +142,7 @@ https://srx-services-xsre-dev.herokuapp.com/xsres/123;zoneId=seattle;contextId=C
 
 messageType: REQUEST
 serviceType: OBJECT
-requestAction: QUERY
+requestAction: UPDATE
 requestType: IMMEDIATE
 x-forwarded-proto: https
 x-forwarded-port: 443
@@ -167,7 +176,7 @@ authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
 serviceType: OBJECT
-requestAction: QUERY
+requestAction: UPDATE
 timeStamp: 2015-08-31T20:41:56.794820
 
 <updateResponse>
@@ -197,23 +206,28 @@ The following required headers must be present in the DELETE request:
 
 Header | Description | Example
 ------ | ----------- | -------
-x-forwarded-proto | Must be set to: https | https
-x-forwarded-port | Must be set to: 443 | 443
-timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
 authorization | Must be set to a valid HMAC-SHA256 encrypted authorization token | SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
-
+timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
+x-forwarded-port | Must be set to: 443 | 443
+x-forwarded-proto | Must be set to: https | https
 
 The following optional headers may also be included:
 
 Header | Description | Example
 ------ | ----------- | -------
-messageType | If specified, must be set to: REQUEST | REQUEST
-serviceType | If specified, must be set to: OBJECT | OBJECT
-requestAction | If specified, must be set to: DELETE | DELETE
-requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+accept | Used to indicate when JSON is expected in response (application/json), else results default to XML | application/xml
+Content-Type | Required when body is present - tells receiver how to parse body of message. Supported: application/json, application/xml (default) | application/xml
+generatorId | Identification token of the “generator” of this request or event | testgenerator
 messageId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
+messageType | If specified, must be set to: REQUEST | REQUEST
+queueId | Contains the identity of one of the Consumer’s assigned Queues to which the delayed Response from the Service Provider to this request must be routed. |
+requestAction | If specified, must be set to: DELETE | DELETE
 requestId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
-generatorId | Service generating request | testgenerator
+requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+responseAction | Must match requestAction | DELETE
+serviceType | If specified, must be set to: OBJECT | OBJECT
+user-agent | Browser and operating system info |
+x-forwarded-for | CBO making original request |
 
 
 ###### Example xSRE DELETE request
@@ -224,7 +238,7 @@ https://srx-services-xsre-dev.herokuapp.com/xsres/123;zoneId=seattle;contextId=C
 
 messageType: REQUEST
 serviceType: OBJECT
-requestAction: QUERY
+requestAction: DELETE
 requestType: IMMEDIATE
 x-forwarded-proto: https
 x-forwarded-port: 443
@@ -237,7 +251,7 @@ authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
 serviceType: OBJECT
-requestAction: QUERY
+requestAction: DELETE
 timeStamp: 2015-08-31T20:41:56.794820
 
 <deleteResponse>
