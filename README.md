@@ -3,8 +3,8 @@
 
 ***
 * XSREs are retrieved via a GET request.
-* XSREs are created via an UPDATE request, NOT a CREATE request.
-* XSREs are updated via a UPDATE request.
+* XSREs are created via a PUT request, NOT a POST request.
+* XSREs are updated via a PUT request.
 * XSREs are deleted via a DELETE request.
 
 All requests use the following URL format:
@@ -16,7 +16,7 @@ https://[baseUrl]/xsres/[studentId];zoneId=[zoneId];contextId=[contextId]
 Variable | Description | Example
 --------- | ----------- | -------
 baseUrl   | URL of the deployment environment hosting the adapter endpoints. | srx-services-xsre-dev.herokuapp.com
-studentId | Unique identifier of a student xSRE record to retrieve. | 123
+studentId | Unique identifier of a student xSRE record to retrieve. | 999
 zoneId    | Zone containing the requested student xSRE record | seattle
 contextId | Client context of request. | CBO
 
@@ -53,7 +53,7 @@ x-forwarded-for | CBO making original request |
 
 ```
 GET
-https://srx-services-xsre-dev.herokuapp.com/xsres/123;zoneId=seattle;contextId=CBO
+https://srx-services-xsre-dev.herokuapp.com/xsres/999;zoneId=seattle;contextId=CBO
 
 messageType: REQUEST
 serviceType: OBJECT
@@ -73,26 +73,30 @@ serviceType: OBJECT
 requestAction: QUERY
 timeStamp: 2015-08-31T20:41:56.794820
 
-<?xml version="1.0" encoding="utf-8"?>
-<xSre refId="6b54b58b-c681-4420-b90c-a5215b2ad3a2" xmlns:sif="http://www.sifassociation.org/datamodel/na/3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:psesd="psesd">
-  <name>
-    <familyName cedsId="000172">Stark</familyName>
-    <givenName cedsId="000115">Rickon</givenName>
-  </name>
-  <localId cedsId="001071">123</localId>
-  <phoneNumber>
-    <number cedsId="000279">555-555-1212</number>
-    <primaryIndicator cedsId="000219">True</primaryIndicator>
-  </phoneNumber>
-  <demographics>
-    <races>
-      <race cedsId="000016">AmericanIndianOrAlaskaNative</race>
-    </races>
-    <hispanicLatinoEthnicity cedsId="000144">False</hispanicLatinoEthnicity>
-    <sex cedsId="000255">Male</sex>
-  </demographics>
-  ...  
-</xSre>
+<xSre refId="afbdfd84-af6e-4f14-ab1f-9d43467696a3" xmlns:sif="http://www.sifassociation.org/datamodel/na/3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <name>
+      <familyName>Stark</familyName>
+      <givenName>Brandon</givenName>
+      <middleName>Eddard</middleName>
+    </name>
+      <localId>999</localId>
+      <otherIds>
+        <otherId>
+          <type>State</type>
+          <id>1234567890</id>
+        </otherId>
+      </otherIds>
+      <demographics>
+        <races>
+          <race>
+            <race>White</race>
+          </race>
+        </races>
+        <sex>Male</sex>
+        <birthDate>1996-10-17</birthDate>
+      </demographics>
+      <reportDate>2015-05-29</reportDate>
+  </xSre>
 ```
 
 ***
@@ -100,7 +104,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 
 ```
 PUT
-https://srx-services-xsre-dev.herokuapp.com/xsres/123;zoneId=seattle;contextId=CBO
+https://srx-services-xsre-dev.herokuapp.com/xsres/999;zoneId=seattle;contextId=CBO
 
 messageType: REQUEST
 serviceType: OBJECT
@@ -111,26 +115,30 @@ x-forwarded-port: 443
 timeStamp: 2015-08-31T20:41:56.794820
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 
-<?xml version="1.0" encoding="utf-8"?>
-<xSre refId="6b54b58b-c681-4420-b90c-a5215b2ad3a2" xmlns:sif="http://www.sifassociation.org/datamodel/na/3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:psesd="psesd">
-  <name>
-    <familyName cedsId="000172">Stark</familyName>
-    <givenName cedsId="000115">Brandon</givenName>
-  </name>
-  <localId cedsId="001071">123</localId>
-  <phoneNumber>
-    <number cedsId="000279">555-555-1212</number>
-    <primaryIndicator cedsId="000219">True</primaryIndicator>
-  </phoneNumber>
-  <demographics>
-    <races>
-      <race cedsId="000016">AmericanIndianOrAlaskaNative</race>
-    </races>
-    <hispanicLatinoEthnicity cedsId="000144">False</hispanicLatinoEthnicity>
-    <sex cedsId="000255">Male</sex>
-  </demographics>
-  ...  
-</xSre>
+<xSre refId="afbdfd84-af6e-4f14-ab1f-9d43467696a3" xmlns:sif="http://www.sifassociation.org/datamodel/na/3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <name>
+      <familyName>Stark</familyName>
+      <givenName>Brandon</givenName>
+      <middleName>Ned</middleName>
+    </name>
+      <localId>999</localId>
+      <otherIds>
+        <otherId>
+          <type>State</type>
+          <id>1234567890</id>
+        </otherId>
+      </otherIds>
+      <demographics>
+        <races>
+          <race>
+            <race>White</race>
+          </race>
+        </races>
+        <sex>Male</sex>
+        <birthDate>1996-10-17</birthDate>
+      </demographics>
+      <reportDate>2015-05-29</reportDate>
+  </xSre>
 ```
 
 ###### Example xSRE PUT response
@@ -143,7 +151,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 
 <updateResponse>
   <updates>
-    <update id="123" statusCode="200"/>
+    <update id="999" statusCode="200"/>
   </updates>
 </updateResponse>
 ```
@@ -153,7 +161,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 
 ```
 DELETE
-https://srx-services-xsre-dev.herokuapp.com/xsres/123;zoneId=seattle;contextId=CBO
+https://srx-services-xsre-dev.herokuapp.com/xsres/999;zoneId=seattle;contextId=CBO
 
 messageType: REQUEST
 serviceType: OBJECT
@@ -175,7 +183,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 
 <deleteResponse>
   <deletes>
-    <delete id="123" statusCode="200"/>
+    <delete id="999" statusCode="200"/>
   </deletes>
 </deleteResponse>
 ```
