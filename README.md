@@ -49,7 +49,7 @@ user-agent | Browser and operating system info |
 x-forwarded-for | CBO making original request |
 
 
-###### Example xSRE GET request
+##### Example xSRE GET request
 
 ```
 GET
@@ -65,7 +65,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 ```
 
-###### Example xSRE GET response
+##### Example xSRE GET response
 ```
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
@@ -100,7 +100,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 ```
 
 ***
-###### Example xSRE PUT request
+##### Example xSRE PUT request
 
 ```
 PUT
@@ -141,7 +141,7 @@ authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
   </xSre>
 ```
 
-###### Example xSRE PUT response
+##### Example xSRE PUT response
 ```
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
@@ -157,7 +157,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 ```
 
 ***
-###### Example xSRE DELETE request
+##### Example xSRE DELETE request
 
 ```
 DELETE
@@ -173,7 +173,7 @@ timeStamp: 2015-08-31T20:41:56.794820
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 ```
 
-###### Example xSRE DELETE response
+##### Example xSRE DELETE response
 ```
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
