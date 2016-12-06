@@ -6,7 +6,7 @@ import javax.xml.transform.sax.SAXSource
 import javax.xml.validation.{Schema, SchemaFactory}
 
 import org.psesd.srx.services.xsre.exceptions.{XsdInvalidException, XsdNotFoundException}
-import org.psesd.srx.shared.core.config.{AmazonS3Config, Environment}
+import org.psesd.srx.shared.core.config.{AmazonS3Config, Environment, ZoneConfig}
 import org.psesd.srx.shared.core.exceptions._
 import org.psesd.srx.shared.core.extensions.TypeExtensions._
 import org.psesd.srx.shared.core.io.AmazonS3Client
@@ -34,7 +34,7 @@ object SchemaCache {
       throw new ArgumentNullOrEmptyOrWhitespaceException("zoneId")
     }
 
-    val zoneConfig = new ZoneConfig(zoneId)
+    val zoneConfig = new ZoneConfig(zoneId, XsreServer.srxService.service.name)
     val key = getKey(zoneConfig)
 
     var schema: Schema = schemas.getOrElse(key, null)

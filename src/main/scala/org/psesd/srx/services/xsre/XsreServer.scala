@@ -3,7 +3,7 @@ package org.psesd.srx.services.xsre
 import org.http4s._
 import org.http4s.dsl._
 import org.psesd.srx.shared.core._
-import org.psesd.srx.shared.core.config.Environment
+import org.psesd.srx.shared.core.config.{ConfigCache, Environment}
 import org.psesd.srx.shared.core.sif._
 
 import scala.concurrent.ExecutionContext

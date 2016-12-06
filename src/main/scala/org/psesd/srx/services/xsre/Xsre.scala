@@ -9,6 +9,7 @@ import org.psesd.srx.shared.core.io.AmazonS3Client
 import org.psesd.srx.shared.core.sif.SifRequestAction.SifRequestAction
 import org.psesd.srx.shared.core.sif.{SifHttpStatusCode, SifRequestAction, SifRequestParameter, _}
 import org.psesd.srx.shared.core._
+import org.psesd.srx.shared.core.config.ConfigCache
 
 import scala.xml.Node
 
@@ -285,7 +286,7 @@ object Xsre extends SrxResourceService {
   }
 
   private def getZoneS3Client(zoneId: String): AmazonS3Client = {
-    val zoneConfig = ConfigCache.getConfig(zoneId)
+    val zoneConfig = ConfigCache.getConfig(zoneId, XsreServer.srxService.service.name)
     AmazonS3Client(zoneConfig.cacheBucketName, zoneConfig.cachePath)
   }
 
