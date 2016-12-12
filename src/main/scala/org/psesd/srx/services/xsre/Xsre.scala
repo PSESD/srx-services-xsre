@@ -117,6 +117,13 @@ object Xsre extends SrxResourceService {
     Xsre(xsre.toXml, None)
   }
 
+  def apply(requestBody: SrxRequestBody, parameters: Option[List[SifRequestParameter]]): Xsre = {
+    if (requestBody == null) {
+      throw new ArgumentNullException("requestBody parameter")
+    }
+    apply(requestBody.getXml.orNull, parameters)
+  }
+
   def apply(xsreXml: Node, parameters: Option[List[SifRequestParameter]]): Xsre = {
     if (xsreXml == null) {
       throw new ArgumentNullException("xsreXml parameter")
@@ -223,7 +230,7 @@ object Xsre extends SrxResourceService {
   private def deleteXsre(zoneId: String, xsreId: String): Unit = {
     try {
       val fileName = XsreFile.getName(xsreId)
-      val s3Client = getZoneS3Client(zoneId)
+      val s3Client = getXsreS3Client(zoneId)
       s3Client.delete(fileName)
       s3Client.shutdown
     } catch {
@@ -245,7 +252,7 @@ object Xsre extends SrxResourceService {
 
     try {
       val fileName = XsreFile.getName(xsreId)
-      val s3Client = getZoneS3Client(zoneId)
+      val s3Client = getXsreS3Client(zoneId)
       if (s3Client.fileExists(fileName)) {
         xsreFile = new XsreFile(xsreId, s3Client.download(fileName))
         log(SifRequestAction.Query.toString(), zoneId, xsreId, parameters)
@@ -284,9 +291,9 @@ object Xsre extends SrxResourceService {
     }
   }
 
-  private def getZoneS3Client(zoneId: String): AmazonS3Client = {
-    val zoneConfig = ConfigCache.getConfig(zoneId)
-    AmazonS3Client(zoneConfig.cacheBucketName, zoneConfig.cachePath)
+  private def getXsreS3Client(zoneId: String): AmazonS3Client = {
+    val xsreConfig = new XsreConfig(zoneId)
+    AmazonS3Client(xsreConfig.cacheBucketName, xsreConfig.cachePath)
   }
 
   private def updateXsre(zoneId: String, xsreId: String, xsre: Xsre, parameters: List[SifRequestParameter]): Unit = {
@@ -295,7 +302,7 @@ object Xsre extends SrxResourceService {
       validateXsre(zoneId, xsre)
 
       val fileName = XsreFile.getName(xsreId)
-      val s3Client = getZoneS3Client(zoneId)
+      val s3Client = getXsreS3Client(zoneId)
       val exists = s3Client.fileExists(fileName)
 
       s3Client.upload(fileName, xsre.xsre)

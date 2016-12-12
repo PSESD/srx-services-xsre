@@ -20,7 +20,7 @@ class SchemaCacheTests extends FunSuite {
       val result = SchemaCache.getSchema("foo")
     }
     val message = thrown.getMessage
-    val expected = "XSRE configuration missing for zone 'foo'."
+    val expected = "The requested ZoneConfig resource was not found."
     assert(message.equals(expected))
   }
 

@@ -25,8 +25,8 @@ import scala.collection.mutable.ArrayBuffer
 object SchemaCache {
   private val schemas = new TrieMap[String, Schema]
 
-  private def getKey(zoneConfig: ZoneConfig): String = {
-    "%s_%s".format(zoneConfig.schemaPath, zoneConfig.schemaRootFileName)
+  private def getKey(xsreConfig: XsreConfig): String = {
+    "%s_%s".format(xsreConfig.schemaPath, xsreConfig.schemaRootFileName)
   }
 
   def getSchema(zoneId: String): Schema = {
@@ -34,8 +34,8 @@ object SchemaCache {
       throw new ArgumentNullOrEmptyOrWhitespaceException("zoneId")
     }
 
-    val zoneConfig = new ZoneConfig(zoneId)
-    val key = getKey(zoneConfig)
+    val xsreConfig = new XsreConfig(zoneId)
+    val key = getKey(xsreConfig)
 
     var schema: Schema = schemas.getOrElse(key, null)
 
@@ -45,7 +45,7 @@ object SchemaCache {
       val factory = SchemaFactory.newInstance(schemaLang)
 
       // create schema and handle invalid XSD content
-      val mergedXsd = XsdBuilder.mergeSchemas(getXsdFiles(zoneConfig), zoneConfig.schemaRootFileName)
+      val mergedXsd = XsdBuilder.mergeSchemas(getXsdFiles(xsreConfig), xsreConfig.schemaRootFileName)
       val sources: Array[Source] = Array(new SAXSource(new InputSource(new StringReader(mergedXsd))))
       try {
         schema = factory.newSchema(sources)
@@ -60,10 +60,10 @@ object SchemaCache {
     schema
   }
 
-  private def getXsdFiles(zoneConfig: ZoneConfig): List[XsdFile] = {
+  private def getXsdFiles(xsreConfig: XsreConfig): List[XsdFile] = {
     val xsdList = new ArrayBuffer[XsdFile]()
 
-    val xsdPath = zoneConfig.schemaPath
+    val xsdPath = xsreConfig.schemaPath
     val xsdFullPath = "%s/%s".format(Environment.getProperty(AmazonS3Config.PathKey), xsdPath)
     val s3Client = AmazonS3Client(xsdFullPath)
 
