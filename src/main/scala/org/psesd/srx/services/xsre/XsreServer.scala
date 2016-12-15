@@ -17,7 +17,8 @@ import scala.concurrent.ExecutionContext
 object XsreServer extends SrxServer {
 
   private final val ServerUrlKey = "SERVER_URL"
-  private final val configCacheResource = "configcache"
+  private final val ConfigCacheResource = "configcache"
+  private final val XsreResource = "masterXsres"
 
   private final val DatasourceClassNameKey = "DATASOURCE_CLASS_NAME"
   private final val DatasourceMaxConnectionsKey = "DATASOURCE_MAX_CONNECTIONS"
@@ -40,8 +41,6 @@ object XsreServer extends SrxServer {
     )
   )
 
-  private val xSreResource = "xsres"
-
   override def serviceRouter(implicit executionContext: ExecutionContext) = HttpService {
 
     case req@GET -> Root =>
@@ -59,36 +58,36 @@ object XsreServer extends SrxServer {
 
     /* XSRE */
 
-    case req@GET -> Root / _ if services(req, xSreResource) =>
+    case req@GET -> Root / _ if services(req, XsreResource) =>
       // executeRequest(req, None, xSreResource, Xsre)
       // GET ALL xSREs is not allowed
       MethodNotAllowed()
 
-    case req@GET -> Root / `xSreResource` / _ =>
-      executeRequest(req, None, xSreResource, Xsre)
+    case req@GET -> Root / `XsreResource` / _ =>
+      executeRequest(req, None, XsreResource, Xsre)
 
-    case req@POST -> Root / _ if services(req, xSreResource) =>
+    case req@POST -> Root / _ if services(req, XsreResource) =>
       // executeRequest(req, None, xSreResource, Xsre, Xsre.apply)
       // POST xSREs is not allowed - use PUT instead to Update if exists else Create
       MethodNotAllowed()
 
-    case req@PUT -> Root / _ if services(req, xSreResource) =>
+    case req@PUT -> Root / _ if services(req, XsreResource) =>
       MethodNotAllowed()
 
-    case req@PUT -> Root / `xSreResource` / _ =>
-      executeRequest(req, None, xSreResource, Xsre, Xsre.apply)
+    case req@PUT -> Root / `XsreResource` / _ =>
+      executeRequest(req, None, XsreResource, Xsre, Xsre.apply)
 
-    case req@DELETE -> Root / _ if services(req, xSreResource) =>
+    case req@DELETE -> Root / _ if services(req, XsreResource) =>
       MethodNotAllowed()
 
-    case req@DELETE -> Root / `xSreResource` / _ =>
-      executeRequest(req, None, xSreResource, Xsre)
+    case req@DELETE -> Root / `XsreResource` / _ =>
+      executeRequest(req, None, XsreResource, Xsre)
 
 
     /* CONFIG CACHE */
 
-    case req@DELETE -> Root / _ if services(req, configCacheResource) =>
-      executeRequest(req, None, configCacheResource, ConfigCache)
+    case req@DELETE -> Root / _ if services(req, ConfigCacheResource) =>
+      executeRequest(req, None, ConfigCacheResource, ConfigCache)
 
 
     case _ =>

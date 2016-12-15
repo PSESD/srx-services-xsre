@@ -94,7 +94,7 @@ class XsreServerTests extends FunSuite {
 
   test("create xSRE not allowed") {
     if (Environment.isLocal) {
-      val resource = "xsres"
+      val resource = "masterXsres"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       sifRequest.body = Some(TestValues.testXsre.xsre)
@@ -105,7 +105,7 @@ class XsreServerTests extends FunSuite {
 
   test("update all xSREs not allowed") {
     if (Environment.isLocal) {
-      val resource = "xsres"
+      val resource = "masterXsres"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       sifRequest.body = Some(TestValues.testXsre.xsre)
@@ -116,7 +116,7 @@ class XsreServerTests extends FunSuite {
 
   test("update xSRE valid") {
     if (Environment.isLocal) {
-      val resource = "xsres/999"
+      val resource = "masterXsres/999"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       sifRequest.body = Some(TestValues.testXsre.xsre)
@@ -127,7 +127,7 @@ class XsreServerTests extends FunSuite {
 
   test("query all xSREs not allowed") {
     if (Environment.isLocal) {
-      val resource = "xsres"
+      val resource = "masterXsres"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       val response = new SifConsumer().query(sifRequest)
@@ -137,7 +137,7 @@ class XsreServerTests extends FunSuite {
 
   test("query xSRE not found") {
     if (Environment.isLocal) {
-      val resource = "xsres/-987"
+      val resource = "masterXsres/-987"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       val response = new SifConsumer().query(sifRequest)
@@ -147,7 +147,7 @@ class XsreServerTests extends FunSuite {
 
   test("query xSRE valid") {
     if (Environment.isLocal) {
-      val resource = "xsres/123"
+      val resource = "masterXsres/123"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       val response = new SifConsumer().query(sifRequest)
@@ -159,7 +159,7 @@ class XsreServerTests extends FunSuite {
 
   test("delete all xSREs not allowed") {
     if (Environment.isLocal) {
-      val resource = "xsres"
+      val resource = "masterXsres"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       val response = new SifConsumer().delete(sifRequest)
@@ -169,7 +169,7 @@ class XsreServerTests extends FunSuite {
 
   test("delete xSRE valid") {
     if (Environment.isLocal) {
-      val resource = "xsres/999"
+      val resource = "masterXsres/999"
       val sifRequest = new SifRequest(TestValues.sifProvider, resource, SifZone("test"), SifContext())
       sifRequest.generatorId = Some(TestValues.generatorId)
       val response = new SifConsumer().delete(sifRequest)
@@ -215,13 +215,6 @@ class XsreServerTests extends FunSuite {
       println("%s=%s".format(header._1, header._2))
     }
     println(response.getBody(SifContentType.Xml))
-    /*
-    if(response.bodyXml.isDefined) {
-      println(response.getBody(SifContentType.Xml))
-    } else {
-      println(response.body.getOrElse(""))
-    }
-    */
   }
 
 }
