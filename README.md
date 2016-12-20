@@ -26,7 +26,7 @@ The following required headers must be present in the GET request:
 Header | Description | Example
 ------ | ----------- | -------
 authorization | Must be set to a valid HMAC-SHA256 encrypted authorization token | SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
-timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:S | 2015-08-31T20:41:56.794820
+timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:SSSZ | 2016-12-20T18:09:18.539Z
 x-forwarded-port | Must be set to: 443 | 443
 x-forwarded-proto | Must be set to: https | https
 
@@ -59,7 +59,7 @@ requestAction: QUERY
 requestType: IMMEDIATE
 x-forwarded-proto: https
 x-forwarded-port: 443
-timeStamp: 2015-08-31T20:41:56.794820
+timeStamp: 2016-12-20T18:09:17.861Z
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 ```
 
@@ -69,7 +69,7 @@ messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
 serviceType: OBJECT
 requestAction: QUERY
-timeStamp: 2015-08-31T20:41:56.794820
+timeStamp: 2016-12-20T18:09:18.447Z
 
 <xSre refId="afbdfd84-af6e-4f14-ab1f-9d43467696a3" xmlns:sif="http://www.sifassociation.org/datamodel/na/3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <name>
@@ -110,7 +110,7 @@ requestAction: UPDATE
 requestType: IMMEDIATE
 x-forwarded-proto: https
 x-forwarded-port: 443
-timeStamp: 2015-08-31T20:41:56.794820
+timeStamp: 2016-12-20T18:09:17.861Z
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 
 <xSre refId="afbdfd84-af6e-4f14-ab1f-9d43467696a3" xmlns:sif="http://www.sifassociation.org/datamodel/na/3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -145,7 +145,7 @@ messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
 serviceType: OBJECT
 requestAction: UPDATE
-timeStamp: 2015-08-31T20:41:56.794820
+timeStamp: 2016-12-20T18:09:18.447Z
 
 <updateResponse>
   <updates>
@@ -167,7 +167,7 @@ requestAction: DELETE
 requestType: IMMEDIATE
 x-forwarded-proto: https
 x-forwarded-port: 443
-timeStamp: 2015-08-31T20:41:56.794820
+timeStamp: 2016-12-20T18:09:17.861Z
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 ```
 
@@ -177,7 +177,7 @@ messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
 serviceType: OBJECT
 requestAction: DELETE
-timeStamp: 2015-08-31T20:41:56.794820
+timeStamp: 2016-12-20T18:09:18.447Z
 
 <deleteResponse>
   <deletes>
