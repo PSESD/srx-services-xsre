@@ -21,14 +21,12 @@ zoneId    | Zone containing the requested student xSRE record | seattle
 contextId | Client context of request. | CBO
 
 
-The following required headers must be present in the GET request:
+The following required headers must be present in requests:
 
 Header | Description | Example
 ------ | ----------- | -------
 authorization | Must be set to a valid HMAC-SHA256 encrypted authorization token | SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 timeStamp | Must be set to a valid date/time in the following format: yyyy-MM-ddTHH:mm:ss:SSSZ | 2016-12-20T18:09:18.539Z
-x-forwarded-port | Must be set to: 443 | 443
-x-forwarded-proto | Must be set to: https | https
 
 The following optional headers may also be included:
 
@@ -41,7 +39,7 @@ messageId | Consumer-generated. If specified, must be set to a valid UUID | ba74
 messageType | If specified, must be set to: REQUEST | REQUEST
 requestAction | If specified, must be set to: QUERY, UPDATE, or DELETE | QUERY
 requestId | Consumer-generated. If specified, must be set to a valid UUID | ba74efac-94c1-42bf-af8b-9b149d067816
-requestType | If specified, must be set to: IMMEDIATE | IMMEDIATE
+requestType | Must be set to IMMEDIATE or DELAYED. Defaults to IMMEDIATE. | IMMEDIATE
 responseAction | Must match requestAction | QUERY
 serviceType | If specified, must be set to: OBJECT | OBJECT
 x-forwarded-for | CBO making original request |
