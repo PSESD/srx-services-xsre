@@ -64,8 +64,7 @@ object SchemaCache {
     val xsdList = new ArrayBuffer[XsdFile]()
 
     val xsdPath = xsreConfig.schemaPath
-    val xsdFullPath = "%s/%s".format(Environment.getProperty(AmazonS3Config.PathKey), xsdPath)
-    val s3Client = AmazonS3Client(xsdFullPath)
+    val s3Client = AmazonS3Client(xsdPath)
 
     val files = s3Client.list("", false)
     // if no files were found at specified location, throw exception
@@ -75,7 +74,7 @@ object SchemaCache {
 
     for (file <- files) {
       if (file.toLowerCase().endsWith(".xsd")) {
-        val fileName = file.substring(xsdFullPath.length + 1)
+        val fileName = file.substring(xsdPath.length + 1)
         try {
           xsdList += new XsdFile(
             xsdPath,

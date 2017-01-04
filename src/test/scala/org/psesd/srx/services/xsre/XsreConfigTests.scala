@@ -17,9 +17,9 @@ class XsreConfigTests extends FunSuite {
     val zoneId = "test"
     val xsreConfig = new XsreConfig(zoneId)
     assert(xsreConfig.zoneId.equals(zoneId))
-    assert(xsreConfig.cacheBucketName.equals("p2-xsre-cache-dev"))
-    assert(xsreConfig.cachePath.equals("test"))
-    assert(xsreConfig.schemaPath.equals("xsd/sif_3_3"))
+    assert(xsreConfig.cacheBucketName.equals("srx-development"))
+    assert(xsreConfig.cachePath.equals("cache/xsres/test"))
+    assert(xsreConfig.schemaPath.equals("config/schemas/sif_3_3"))
     assert(xsreConfig.schemaRootFileName.equals("SIFNAxSRE.xsd"))
   }
 
