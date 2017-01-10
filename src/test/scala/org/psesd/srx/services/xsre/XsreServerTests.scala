@@ -5,7 +5,7 @@ import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
 import org.apache.http.util.EntityUtils
 import org.http4s.dsl._
 import org.http4s.{Method, Request}
-import org.psesd.srx.shared.core.CoreResource
+import org.psesd.srx.shared.core.SrxResourceType
 import org.psesd.srx.shared.core.config.Environment
 import org.psesd.srx.shared.core.extensions.HttpTypeExtensions._
 import org.psesd.srx.shared.core.sif._
@@ -80,7 +80,7 @@ class XsreServerTests extends FunSuite {
 
   test("info (localhost)") {
     if (Environment.isLocal) {
-      val sifRequest = new SifRequest(TestValues.sifProvider, CoreResource.Info.toString)
+      val sifRequest = new SifRequest(TestValues.sifProvider, SrxResourceType.Info.toString)
       val response = new SifConsumer().query(sifRequest)
       val responseBody = response.body.getOrElse("")
       assert(response.statusCode.equals(SifHttpStatusCode.Ok))

@@ -18,7 +18,7 @@ object XsreServer extends SrxServer {
 
   private final val ServerUrlKey = "SERVER_URL"
   private final val ConfigCacheResource = "configcache"
-  private final val XsreResource = "masterXsres"
+  private final val XsreResource = SrxResourceType.MasterXsres.toString
 
   private final val DatasourceClassNameKey = "DATASOURCE_CLASS_NAME"
   private final val DatasourceMaxConnectionsKey = "DATASOURCE_MAX_CONNECTIONS"
@@ -49,10 +49,10 @@ object XsreServer extends SrxServer {
     case _ -> Root =>
       NotImplemented()
 
-    case req@GET -> Root / _ if services(req, CoreResource.Ping.toString) =>
+    case req@GET -> Root / _ if services(req, SrxResourceType.Ping.toString) =>
       Ok(true.toString)
 
-    case req@GET -> Root / _ if services(req, CoreResource.Info.toString) =>
+    case req@GET -> Root / _ if services(req, SrxResourceType.Info.toString) =>
       respondWithInfo(getDefaultSrxResponse(req))
 
 
