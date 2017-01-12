@@ -2,15 +2,74 @@
 **Retrieves, creates, updates, and deletes xSRE XML for District to CBO transfers.**
 
 ***
-* XSREs are retrieved via a GET request.
-* XSREs are created via a PUT request, NOT a POST request.
-* XSREs are updated via a PUT request.
-* XSREs are deleted via a DELETE request.
+
+## Configuration
+
+### Environment Variables
+Variable | Description | Example
+-------- | ----------- | -------
+AMAZON_S3_ACCESS_KEY | AWS S3 access key for SRX cache. | (see Heroku)
+AMAZON_S3_BUCKET_NAME | AWS S3 bucket name for SRX cache. | (see Heroku)
+AMAZON_S3_PATH | Root path to files within SRX cache. | (see Heroku)
+AMAZON_S3_SECRET | AWS S3 secret for SRX cache. | (see Heroku)
+AMAZON_S3_TIMEOUT | AWS S3 request timeout in ms. | 300000
+ENVIRONMENT | Deployment environment name.  | development
+LOG_LEVEL | Logging level (info, debug, error). | debug
+ROLLBAR_ACCESS_TOKEN | Rollbar access token for error logging. | (see Heroku)
+ROLLBAR_URL| URL to Rollbar API. | https://api.rollbar.com/api/1/item/
+SERVER_API_ROOT| Root path for this service. | (typically leave blank)
+SERVER_HOST  | Host IP for this service. | 127.0.0.1
+SERVER_NAME | Server name for this service. | localhost
+SERVER_PORT | Port this service listens on. | 8080
+SERVER_URL | URL for this service. | http://localhost
+SRX_ENVIRONMENT_URL | HostedZone environment URL. | https://psesd.hostedzone.com/svcs/dev/requestProvider
+SRX_SESSION_TOKEN | HostedZone session token assigned to this service. | (see HostedZone configuration)
+SRX_SHARED_SECRET  | HostedZone shared secret assigned to this service. | (see HostedZone configuration)
+
+### HostedZone
+The xSRE service (srx-services-xsre) must be registered in HostedZone as a new "environment" (application) that provides the following "services" (resources):
+
+ * masterXsres
+
+Once registered, the supplied HostedZone session token and shared secret should be set in the srx-services-admin host server (Heroku) environment variables (see above).
+
+This Admin service must be further configured in HostedZone as follows:
+
+Service | Zone | Context | Provide | Query | Create | Update | Delete
+------- | ---- | ------- | ------- | ----- | ------ | ------ | ------
+masterXsres | default | default | X | X |  | X|X
+masterXsres | [district*] | default | X |  |  | |
+masterXsres | [district*] | district | X |  |  | |
+masterXsres | test | default | X | X |  | X|X
+masterXsres | test | district | X | X |  | X|X
+masterXsres | test | test | X | X |  | X|X
+srxMessages | default | default |   |   | X |  |
+srxMessages | [district*] | default |   |   | X |  |
+srxMessages | [district*] | district |   |   | X |  |
+srxMessages | test | district |   |   | X |  |
+srxMessages | test | test |   |   | X |  |
+srxZoneConfig | default | default |   |X |  |  |
+srxZoneConfig | [district*] | default |   |X |  |  |
+srxZoneConfig | default | default |   |X |  |  |
+srxZoneConfig | test | default |   |X |  |  |
+srxZoneConfig | test | district |   |X |  |  |
+srxZoneConfig | test | test |   |X |  |  |
+
+
+
+## Usage
+```More usage notes go here```
+
+### MasterXSREs
+* MasterXSREs are retrieved via a GET request.
+* MasterXSREs are created via a PUT request, NOT a POST request.
+* MasterXSREs are updated via a PUT request.
+* MasterXSREs are deleted via a DELETE request.
 
 All requests use the following URL format:
 
 ```
-https://[baseUrl]/xsres/[studentId];zoneId=[zoneId];contextId=[contextId]
+https://[baseUrl]/masterXsres/[studentId];zoneId=[zoneId];contextId=[contextId]
 ```
 
 Variable | Description | Example
@@ -45,11 +104,11 @@ serviceType | If specified, must be set to: OBJECT | OBJECT
 x-forwarded-for | CBO making original request |
 
 
-#### Example xSRE GET request
+#### Example MasterXSRE GET request
 
 ```
 GET
-https://srx-services-xsre-dev.herokuapp.com/xsres/999;zoneId=seattle;contextId=CBO
+https://srx-services-xsre-dev.herokuapp.com/masterXsres/999;zoneId=seattle;contextId=CBO
 
 messageType: REQUEST
 serviceType: OBJECT
@@ -61,7 +120,7 @@ timeStamp: 2016-12-20T18:09:17.861Z
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 ```
 
-#### Example xSRE GET response
+#### Example MasterXSRE GET response
 ```
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
@@ -96,11 +155,11 @@ timeStamp: 2016-12-20T18:09:18.447Z
 ```
 
 ***
-#### Example xSRE PUT request
+#### Example MasterXSRE PUT request
 
 ```
 PUT
-https://srx-services-xsre-dev.herokuapp.com/xsres/999;zoneId=seattle;contextId=CBO
+https://srx-services-xsre-dev.herokuapp.com/masterXsres/999;zoneId=seattle;contextId=CBO
 
 messageType: REQUEST
 serviceType: OBJECT
@@ -137,7 +196,7 @@ authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
   </xSre>
 ```
 
-#### Example xSRE PUT response
+#### Example MasterSRE PUT response
 ```
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
@@ -153,11 +212,11 @@ timeStamp: 2016-12-20T18:09:18.447Z
 ```
 
 ***
-#### Example xSRE DELETE request
+#### Example MasterXSRE DELETE request
 
 ```
 DELETE
-https://srx-services-xsre-dev.herokuapp.com/xsres/999;zoneId=seattle;contextId=CBO
+https://srx-services-xsre-dev.herokuapp.com/masterXsres/999;zoneId=seattle;contextId=CBO
 
 messageType: REQUEST
 serviceType: OBJECT
@@ -169,7 +228,7 @@ timeStamp: 2016-12-20T18:09:17.861Z
 authorization: SIF_HMACSHA256 YmU4NjBjNDctNmJkNS00OTUzL...
 ```
 
-#### Example xSRE DELETE response
+#### Example MasterXSRE DELETE response
 ```
 messageId: dcf5d63d-5d07-4b6b-a985-6ca3b6514d1a
 messageType: RESPONSE
