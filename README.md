@@ -33,7 +33,7 @@ The xSRE service (srx-services-xsre) must be registered in HostedZone as a new "
 
 Once registered, the supplied HostedZone session token and shared secret should be set in the srx-services-admin host server (Heroku) environment variables (see above).
 
-This Admin service must be further configured in HostedZone as follows:
+This xSRE service must be further configured in HostedZone as follows:
 
 Service | Zone | Context | Provide | Query | Create | Update | Delete
 ------- | ---- | ------- | ------- | ----- | ------ | ------ | ------
