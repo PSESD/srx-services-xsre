@@ -155,6 +155,13 @@ object Xsre extends SrxResourceService {
     } else {
       try {
         deleteXsre(zoneId.get, id.get)
+        XsreServer.logSuccessMessage(
+          SrxResourceType.MasterXsres.toString,
+          SifRequestAction.Delete.toString,
+          id,
+          SifRequestParameterCollection(parameters),
+          None
+        )
         new XsreResult(SifRequestAction.Delete, SifRequestAction.getSuccessStatusCode(SifRequestAction.Delete), id.get, "")
       } catch {
         case e: Exception =>
@@ -176,8 +183,22 @@ object Xsre extends SrxResourceService {
       try {
         val xSre = getXsre(zoneId.get, id.get, parameters)
         if (xSre.isDefined) {
+          XsreServer.logSuccessMessage(
+            SrxResourceType.MasterXsres.toString,
+            SifRequestAction.Query.toString,
+            id,
+            SifRequestParameterCollection(parameters),
+            None
+          )
           new XsreResult(SifRequestAction.Query, SifRequestAction.getSuccessStatusCode(SifRequestAction.Query), id.get, xSre.get)
         } else {
+          XsreServer.logNotFoundMessage(
+            SrxResourceType.MasterXsres.toString,
+            SifRequestAction.Query.toString,
+            id,
+            SifRequestParameterCollection(parameters),
+            None
+          )
           SrxResourceErrorResult(SifHttpStatusCode.NotFound, new SrxResourceNotFoundException("xSRE"))
         }
       } catch {
@@ -255,7 +276,6 @@ object Xsre extends SrxResourceService {
       val s3Client = getXsreS3Client(zoneId)
       if (s3Client.fileExists(fileName)) {
         xsreFile = new XsreFile(xsreId, s3Client.download(fileName))
-        log(SifRequestAction.Query.toString(), zoneId, xsreId, parameters)
       }
       s3Client.shutdown
     } catch {
@@ -308,10 +328,23 @@ object Xsre extends SrxResourceService {
       s3Client.upload(fileName, xsre.xsre)
       s3Client.shutdown
 
+      // TODO: add request.body to logging once disk space is not an issue (xsre.xsre xml string)
       if(exists) {
-        log(SifRequestAction.Update.toString(), zoneId, xsreId, parameters)
+        XsreServer.logSuccessMessage(
+          SrxResourceType.MasterXsres.toString,
+          SifRequestAction.Update.toString,
+          Some(xsreId),
+          SifRequestParameterCollection(parameters),
+          None
+        )
       } else {
-        log(SifRequestAction.Create.toString(), zoneId, xsreId, parameters)
+        XsreServer.logSuccessMessage(
+          SrxResourceType.MasterXsres.toString,
+          SifRequestAction.Create.toString,
+          Some(xsreId),
+          SifRequestParameterCollection(parameters),
+          None
+        )
       }
     } catch {
       case s3: AmazonS3Exception =>
@@ -325,38 +358,6 @@ object Xsre extends SrxResourceService {
       case ex: Exception =>
         throw ex
     }
-  }
-
-  def log(method: String, zoneId: String, studentId: String, parameters: List[SifRequestParameter]): Unit = {
-    val generatorId = getRequestParameter(parameters, SifHeader.GeneratorId.toString())
-    val requestId = getRequestParameter(parameters, SifHeader.RequestId.toString())
-    val uri = getRequestParameter(parameters, "uri")
-    val sourceIp = getRequestParameter(parameters, SifHttpHeader.ForwardedFor.toString())
-    val userAgent = getRequestParameter(parameters, SifHttpHeader.UserAgent.toString())
-    val contextId = getRequestParameter(parameters, "contextId")
-
-    SrxMessageService.createMessage(
-      XsreServer.srxService.service.name,
-      SrxMessage(
-        XsreServer.srxService,
-        SifMessageId(),
-        SifTimestamp(),
-        Some("xSRE"),
-        Some(method),
-        Some("success"),
-        generatorId,
-        requestId,
-        Some(SifZone(zoneId)),
-        { if (contextId.isDefined) Some(SifContext(contextId.get)) else None },
-        Some(studentId),
-        "%s successful for student '%s' in zone '%s'.".format(method, studentId, zoneId),
-        uri,
-        userAgent,
-        sourceIp,
-        None,
-        None
-      )
-    )
   }
 
   def validateXsre(zoneId: String, xsre: Xsre): Unit = {
