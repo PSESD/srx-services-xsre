@@ -58,7 +58,6 @@ srxZoneConfig | test | test |   |X |  |  |
 
 
 ## Usage
-```More usage notes go here```
 
 ### MasterXSREs
 * MasterXSREs are retrieved via a GET request.
